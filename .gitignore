@@ -40,10 +40,6 @@ venv.bak/
 # macOS
 .DS_Store
 
-# Data files (if large)
-# data/*.xlsx
-# data/*.csv
-
 # Logs
 *.log
 
@@ -86,9 +82,6 @@ dmypy.json
 *.swo
 *~
 .vim/
-
-# Python version management (uncomment if you don't want to track Python version)
-# .python-version
 
 # Distribution / packaging
 *.whl

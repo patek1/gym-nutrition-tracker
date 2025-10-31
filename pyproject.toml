@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
 authors = [
-    {name = "Swiss Gym Nutrition Tracker Team"}
+    {name = "HSG Team"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -34,20 +34,6 @@ dependencies = [
     "fuzzywuzzy",
     "python-Levenshtein",
 ]
-
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-mock",
-    "requests-mock",
-    "jupyter",
-    "ipykernel",
-]
-
-[project.urls]
-Homepage = "https://github.com/yourusername/swiss-gym-nutrition-tracker"
-Documentation = "https://github.com/yourusername/swiss-gym-nutrition-tracker#readme"
-Repository = "https://github.com/yourusername/swiss-gym-nutrition-tracker"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
