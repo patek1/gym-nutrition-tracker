@@ -88,12 +88,19 @@ def load_and_preprocess_data(filepath: str) -> Tuple[pd.DataFrame, Pipeline]:
     df = df.drop(columns=['total_macros_g'])
     
     # Step 6: Create preprocessing pipeline
-    # Define the transformer for scaling kcal
+    # IMPORTANT: We intentionally EXCLUDE 'kcal' from the ML feature space.
+    # Rationale: 'kcal' in the UI often represents remaining daily calories,
+    # which is not commensurate with per-100g food energy values and can
+    # dominate clustering. Using only macro composition ratios focuses the
+    # models on nutritional balance rather than absolute energy.
+    # Features: percentages of macros (sum ≈ 1.0)
+    feature_columns = ['protein_pct', 'fat_pct', 'carbs_pct']
+    
+    # Define the transformer to scale all relevant features
+    # This ensures all features have equal weight in distance calculations
     preprocessor = ColumnTransformer(
         transformers=[
-            ('kcal_scaler', StandardScaler(), ['kcal']),
-            # Pass through the percentage columns without transformation
-            ('passthrough', 'passthrough', ['protein_pct', 'fat_pct', 'carbs_pct'])
+            ('scaler', StandardScaler(), feature_columns)
         ],
         remainder='drop'  # Drop any other columns
     )
@@ -105,12 +112,11 @@ def load_and_preprocess_data(filepath: str) -> Tuple[pd.DataFrame, Pipeline]:
     
     # Step 7: Fit the pipeline on the data and transform it
     # Prepare the feature matrix for fitting
-    feature_columns = ['kcal', 'protein_pct', 'fat_pct', 'carbs_pct']
     X = df[feature_columns]
     
     # Fit and transform the pipeline
     pipeline.fit(X)
-    logger.info(f"Pipeline fitted successfully on {len(df)} samples")
+    logger.info(f"Pipeline fitted successfully on {len(df)} samples with features: {feature_columns}")
     
     # Return the cleaned DataFrame and the fitted pipeline
     return df, pipeline

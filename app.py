@@ -8,8 +8,9 @@ from src.ml.recommendation_engine import RecommendationEngine
 st.set_page_config(page_title="Gym Nutrition Tracker")
 
 # Cached Model Loading
+# Note: Cache key includes version to force reload when code changes
 @st.cache_resource
-def load_engine():
+def load_engine(version: str = "v2"):
     try:
         engine = RecommendationEngine(data_filepath='data/Swiss_food_composition_database.xlsx')
         return engine
@@ -18,7 +19,8 @@ def load_engine():
         return None
 
 # Load the recommendation engine (cached)
-engine = load_engine()
+# Increment version string to force cache refresh when engine code changes
+engine = load_engine(version="v2_fixed")
 
 # Main title
 st.title("Gym Nutrition Tracker")
@@ -322,8 +324,12 @@ else:
         # Check if there are remaining macros
         if sum(remaining_macros.values()) > 0:
             try:
-                # Call get_goal_aligned_foods
-                goal_aligned_foods = engine.get_goal_aligned_foods(remaining_macros, n_recommendations=5)
+                # Call get_goal_aligned_foods with user goals for completion percentage calculation
+                goal_aligned_foods = engine.get_goal_aligned_foods(
+                    remaining_macros, 
+                    user_goals=st.session_state.user_goals,
+                    n_recommendations=5
+                )
                 
                 if not goal_aligned_foods.empty:
                     # Display results in a dataframe
