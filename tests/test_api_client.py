@@ -1,24 +1,9 @@
-"""
-Unit Tests for API Client Module
-
-Tests for FSVO API integration functions including:
-- Food search functionality
-- Food detail retrieval
-- Error handling for API failures
-"""
-
 import pytest
 import requests_mock
 from src.api_client import search_food, get_food_details
 
 
 def test_search_food_success():
-    """
-    Test successful food search with mocked API response.
-    
-    This test simulates a successful API call and verifies that the function
-    correctly parses the JSON response and returns the expected format.
-    """
     # Sample API response matching the user's example structure
     mock_response = [
         {"food": {"name": "Chicken Breast", "dbid": 123}},
@@ -55,12 +40,6 @@ def test_search_food_success():
 
 
 def test_search_food_failure():
-    """
-    Test food search failure handling with mocked 500 server error.
-    
-    This test simulates a server error (500) and verifies that the function
-    returns an empty list and handles the error gracefully.
-    """
     # Mock the API endpoint
     api_url = "https://api.webapp.prod.blv.foodcase-services.com/BLV_WebApp_WS/webresources/BLV-api/foods"
     
@@ -82,11 +61,6 @@ def test_search_food_failure():
 
 
 def test_search_food_empty_response():
-    """
-    Test food search with empty API response.
-    
-    Edge case: API returns 200 but with an empty list.
-    """
     api_url = "https://api.webapp.prod.blv.foodcase-services.com/BLV_WebApp_WS/webresources/BLV-api/foods"
     
     with requests_mock.Mocker() as m:
@@ -103,12 +77,6 @@ def test_search_food_empty_response():
 
 
 def test_search_food_flat_structure():
-    """
-    Test food search with flat response structure (not nested).
-    
-    Edge case: API returns flat structure [{"name": "...", "dbid": ...}]
-    instead of nested structure.
-    """
     mock_response = [
         {"name": "Apple", "dbid": 456},
         {"name": "Banana", "dbid": 457}
@@ -135,12 +103,6 @@ def test_search_food_flat_structure():
 
 
 def test_get_food_details_success():
-    """
-    Test successful food details retrieval with mocked API response.
-    
-    This test simulates a successful API call and verifies that the function
-    correctly parses the JSON response and extracts the four required macro values.
-    """
     # Sample API response with full nutritional profile
     mock_response = {
         "food": {
@@ -189,12 +151,6 @@ def test_get_food_details_success():
 
 
 def test_get_food_details_missing_data():
-    """
-    Test food details retrieval with missing macro data.
-    
-    This test simulates a successful API response (200) but with the 'Protein (g)'
-    key missing, which should cause the function to return None.
-    """
     # Sample API response with missing Protein key
     mock_response = {
         "food": {
@@ -226,12 +182,6 @@ def test_get_food_details_missing_data():
 
 
 def test_get_food_details_api_failure():
-    """
-    Test food details retrieval failure handling with mocked 404 error.
-    
-    This test simulates a 404 Not Found error and verifies that the function
-    returns None and handles the error gracefully.
-    """
     # Mock the API endpoint
     api_url = "https://api.webapp.prod.blv.foodcase-services.com/BLV_WebApp_WS/webresources/BLV-api/food/999"
     
@@ -251,11 +201,6 @@ def test_get_food_details_api_failure():
 
 
 def test_get_food_details_flat_structure():
-    """
-    Test food details retrieval with flat response structure (macros at top level).
-    
-    Edge case: API returns macros directly in the response dict, not nested.
-    """
     # Sample API response with macros at top level
     mock_response = {
         "name": "Apple",

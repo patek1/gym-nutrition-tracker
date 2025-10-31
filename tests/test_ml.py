@@ -1,12 +1,3 @@
-"""
-Integration Tests for Machine Learning Module
-
-This module contains integration tests that test the ML components together.
-For unit tests, see:
-- test_data_processor.py
-- test_recommendation_engine.py
-"""
-
 import pytest
 import pandas as pd
 import numpy as np
@@ -18,17 +9,6 @@ from src.ml.recommendation_engine import RecommendationEngine
 
 
 def test_load_and_preprocess_data():
-    """
-    Test the load_and_preprocess_data function with a mock Excel file.
-    
-    This test creates a temporary Excel file with sample data, including
-    some missing values, and verifies that the function:
-    1. Loads the data correctly
-    2. Selects the correct columns
-    3. Drops rows with missing macro values
-    4. Calculates percentage columns correctly
-    5. Returns a fitted pipeline
-    """
     # Create sample data with some missing values
     sample_data = {
         'Name': ['Chicken Breast', 'Apple', 'Banana', 'Orange', 'Incomplete Food'],
@@ -113,11 +93,6 @@ def test_load_and_preprocess_data():
 
 
 def test_load_and_preprocess_data_zero_macros():
-    """
-    Test edge case: food with zero total macros (protein + fat + carbs = 0).
-    
-    This should handle division by zero gracefully by filling with 0.
-    """
     # Create sample data with a food that has zero macros
     sample_data = {
         'Name': ['Water', 'Chicken Breast'],
@@ -144,15 +119,6 @@ def test_load_and_preprocess_data_zero_macros():
 
 
 def test_recommendation_engine_initialization():
-    """
-    Test RecommendationEngine initialization.
-    
-    This test verifies that the RecommendationEngine class:
-    1. Successfully loads and preprocesses data
-    2. Trains both K-Means and Nearest Neighbors models
-    3. Stores all required attributes
-    4. Adds cluster labels to the data DataFrame
-    """
     # Create sample data for testing
     # Need at least 8 samples for K-Means with 8 clusters
     sample_data = {
@@ -226,15 +192,6 @@ def test_recommendation_engine_initialization():
 
 
 def test_get_similar_foods():
-    """
-    Test get_similar_foods method.
-    
-    This test verifies that the method:
-    1. Finds similar foods for a known food
-    2. Returns the correct number of recommendations
-    3. Excludes the input food from results
-    4. Returns foods with similar macro profiles
-    """
     # Create sample data
     sample_data = {
         'Name': ['Chicken Breast', 'Turkey Breast', 'Chicken Thigh', 'Apple', 'Banana', 
@@ -284,15 +241,6 @@ def test_get_similar_foods():
 
 
 def test_get_goal_aligned_foods():
-    """
-    Test get_goal_aligned_foods method.
-    
-    This test verifies that the method:
-    1. Correctly calculates macro ratios
-    2. Predicts the appropriate cluster
-    3. Returns foods from that cluster
-    4. Returns the correct number of recommendations
-    """
     # Create sample data with diverse macro profiles
     sample_data = {
         'Name': ['Chicken Breast', 'Apple', 'Banana', 'Orange', 'Salmon', 'Broccoli', 

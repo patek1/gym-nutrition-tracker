@@ -1,9 +1,3 @@
-"""
-Gym Nutrition Tracker - Main Streamlit Application
-
-This is the main entry point for the Gym Nutrition Tracker web application.
-"""
-
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -16,15 +10,6 @@ st.set_page_config(page_title="Gym Nutrition Tracker")
 # Cached Model Loading
 @st.cache_resource
 def load_engine():
-    """
-    Load and initialize the RecommendationEngine.
-    
-    This function is cached to ensure the model is loaded only once per session,
-    avoiding unnecessary retraining on every rerun.
-    
-    Returns:
-        RecommendationEngine: Initialized and trained recommendation engine
-    """
     try:
         engine = RecommendationEngine(data_filepath='data/Swiss_food_composition_database.xlsx')
         return engine
@@ -250,15 +235,6 @@ else:
 # Display Progress Bars
 # Helper function to display progress for each macro
 def display_progress_bar(macro_name: str, consumed: float, target: float, unit: str = ""):
-    """
-    Display a progress bar for a macro nutrient.
-    
-    Args:
-        macro_name: Name of the macro (e.g., "Calories")
-        consumed: Amount consumed
-        target: Target amount
-        unit: Unit of measurement (e.g., "kcal", "g")
-    """
     st.write(f"**{macro_name}**")
     
     # Calculate progress percentage, cap at 1.0 to prevent overflow

@@ -1,11 +1,3 @@
-"""
-Recommendation Engine Module
-
-This module implements the machine learning recommendation system using:
-- K-Means clustering for goal-aligned food recommendations
-- Nearest Neighbors for similar food recommendations
-"""
-
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
@@ -14,40 +6,8 @@ from src.ml.data_processor import load_and_preprocess_data
 
 
 class RecommendationEngine:
-    """
-    Machine Learning recommendation engine for food suggestions.
-    
-    This class trains two models:
-    1. K-Means clustering: Groups foods into nutritional archetypes
-    2. Nearest Neighbors: Finds similar foods based on macro profiles
-    
-    Attributes:
-        data (pd.DataFrame): Cleaned food database with cluster labels
-        preprocessor (Pipeline): Fitted preprocessing pipeline
-        kmeans_model (KMeans): Fitted K-Means clustering model
-        nn_model (NearestNeighbors): Fitted Nearest Neighbors model
-        X_features (np.ndarray): Transformed feature matrix for ML models
-    """
     
     def __init__(self, data_filepath: str):
-        """
-        Initialize the RecommendationEngine by loading data and training models.
-        
-        This method:
-        1. Loads and preprocesses the food database
-        2. Transforms features using the preprocessing pipeline
-        3. Trains K-Means clustering model (8 clusters)
-        4. Trains Nearest Neighbors model (6 neighbors)
-        5. Stores cluster labels in the data DataFrame
-        
-        Args:
-            data_filepath (str): Path to the Excel file containing the food database
-            
-        Example:
-            >>> engine = RecommendationEngine("data/swiss_food_comp_db.xlsx")
-            >>> print(engine.data.shape)
-            (1190, 10)
-        """
         # Step 1: Load and preprocess the data
         print(f"Initializing RecommendationEngine with data from {data_filepath}...")
         self.data, self.preprocessor = load_and_preprocess_data(data_filepath)
@@ -95,26 +55,6 @@ class RecommendationEngine:
         print(f"RecommendationEngine initialized successfully with {len(self.data)} foods.")
     
     def get_similar_foods(self, food_name: str, n_recommendations: int = 5) -> pd.DataFrame:
-        """
-        Find similar foods to a given food based on macro profile similarity.
-        
-        This method uses the Nearest Neighbors model to find foods with similar
-        nutritional profiles. The input food itself is excluded from the results.
-        
-        Args:
-            food_name (str): Name of the food to find similar foods for
-            n_recommendations (int): Number of similar foods to return (default: 5)
-            
-        Returns:
-            pd.DataFrame: DataFrame containing recommended foods with columns:
-                - Name, Category, kcal, protein, fat, carbs, protein_pct, fat_pct, carbs_pct
-            Returns empty DataFrame if food_name is not found.
-            
-        Example:
-            >>> engine = RecommendationEngine("data/swiss_food_comp_db.xlsx")
-            >>> similar = engine.get_similar_foods("Chicken Breast", n_recommendations=3)
-            >>> print(similar[['Name', 'kcal', 'protein']])
-        """
         # Step 1: Find the index of the food_name in self.data
         food_mask = self.data['Name'] == food_name
         food_indices = self.data.index[food_mask].tolist()
@@ -162,32 +102,6 @@ class RecommendationEngine:
         return recommended_foods
     
     def get_goal_aligned_foods(self, remaining_macros: dict, n_recommendations: int = 5) -> pd.DataFrame:
-        """
-        Find foods that align with remaining macro goals using K-Means clustering.
-        
-        This method calculates the target macro ratios from remaining macros,
-        finds the cluster that best matches this profile, and returns foods
-        from that cluster.
-        
-        Args:
-            remaining_macros (dict): Dictionary with keys:
-                - 'kcal' (float): Remaining calories
-                - 'protein' (float): Remaining protein in grams
-                - 'fat' (float): Remaining fat in grams
-                - 'carbs' (float): Remaining carbs in grams
-            n_recommendations (int): Number of foods to return (default: 5)
-            
-        Returns:
-            pd.DataFrame: DataFrame containing recommended foods with columns:
-                - Name, Category, kcal, protein, fat, carbs, protein_pct, fat_pct, carbs_pct, cluster
-            Returns empty DataFrame if cluster is empty or calculation fails.
-            
-        Example:
-            >>> engine = RecommendationEngine("data/swiss_food_comp_db.xlsx")
-            >>> remaining = {'kcal': 500, 'protein': 50, 'fat': 20, 'carbs': 100}
-            >>> aligned = engine.get_goal_aligned_foods(remaining, n_recommendations=5)
-            >>> print(aligned[['Name', 'kcal', 'protein']])
-        """
         # Step 1: Calculate target macro ratios (P%, F%, C%)
         # Handle division by zero case
         total_macros = remaining_macros['protein'] + remaining_macros['fat'] + remaining_macros['carbs']
