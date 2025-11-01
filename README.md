@@ -45,9 +45,9 @@ nutrition_tracker/
 
 ### Installation
 
-1. **Clone the repository**
+1. **Clone this repository**
    ```bash
-   git clone https://github.com/yourusername/swiss-gym-nutrition-tracker.git
+   git clone https://github.com/patek1/gym-nutrition-tracker.git
    cd swiss-gym-nutrition-tracker
    ```
 
