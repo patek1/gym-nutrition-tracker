@@ -48,7 +48,7 @@ nutrition_tracker/
 1. **Clone this repository**
    ```bash
    git clone https://github.com/patek1/gym-nutrition-tracker.git
-   cd swiss-gym-nutrition-tracker
+   cd gym-nutrition-tracker
    ```
 
 2. **Create and activate virtual environment**
