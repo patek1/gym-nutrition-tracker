@@ -1,11 +1,114 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import base64
+from pathlib import Path
 from src.api_client import search_food, get_food_details
 from src.ml.recommendation_engine import RecommendationEngine
 
 # Set page configuration
-st.set_page_config(page_title="Gym Nutrition Tracker")
+st.set_page_config(page_title="Fit Matterhorn")
+
+# Function to encode image as base64
+def get_base64_image(image_path):
+    """Convert image to base64 string for CSS background."""
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+# Load and encode background image
+try:
+    background_path = Path("public/background.webp")
+    background_base64 = get_base64_image(background_path)
+    
+    # Inject custom CSS for background and content container
+    # Note: Using multiple approaches to ensure the styling is applied
+    st.markdown(f"""
+        <style>
+        /* Set background image for the entire app */
+        .stApp {{
+            background-image: url("data:image/webp;base64,{background_base64}");
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        
+        /* Make main area background transparent so image shows through */
+        .main {{
+            background-color: transparent !important;
+        }}
+        
+        /* Target the block container - this is the main content area */
+        .block-container {{
+            padding: 2.5rem 3rem !important;
+            background: rgba(255, 255, 255, 0.85) !important;
+            border: 1px solid #808080 !important;
+            border-radius: 20px !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+            max-width: 900px !important;
+            margin: 8rem auto 3rem auto !important;
+        }}
+        
+        /* Additional specificity for different Streamlit versions */
+        section.main > div {{
+            max-width: 100% !important;
+            padding: 0 !important;
+        }}
+        
+        section.main > div > div {{
+            max-width: 100% !important;
+        }}
+        
+        /* Ensure sidebar remains visible with semi-transparent background */
+        section[data-testid="stSidebar"] {{
+            background-color: rgba(255, 255, 255, 0.95) !important;
+        }}
+        
+        /* Additional styling to ensure visibility */
+        .element-container {{
+            z-index: 1;
+        }}
+        </style>
+        
+        <script>
+        // JavaScript to force apply styles after page load
+        window.addEventListener('load', function() {{
+            const blockContainer = document.querySelector('.block-container');
+            if (blockContainer) {{
+                blockContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+                blockContainer.style.border = '1px solid #808080';
+                blockContainer.style.borderRadius = '20px';
+                blockContainer.style.padding = '2.5rem 3rem';
+                blockContainer.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+                blockContainer.style.backdropFilter = 'blur(10px)';
+                blockContainer.style.webkitBackdropFilter = 'blur(10px)';
+                blockContainer.style.maxWidth = '900px';
+                blockContainer.style.margin = '8rem auto 3rem auto';
+            }}
+        }});
+        
+        // Also apply on Streamlit reruns
+        const observer = new MutationObserver(function() {{
+            const blockContainer = document.querySelector('.block-container');
+            if (blockContainer && !blockContainer.style.backgroundColor) {{
+                blockContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+                blockContainer.style.border = '1px solid #808080';
+                blockContainer.style.borderRadius = '20px';
+                blockContainer.style.padding = '2.5rem 3rem';
+                blockContainer.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+                blockContainer.style.backdropFilter = 'blur(10px)';
+                blockContainer.style.webkitBackdropFilter = 'blur(10px)';
+                blockContainer.style.maxWidth = '900px';
+                blockContainer.style.margin = '8rem auto 3rem auto';
+            }}
+        }});
+        observer.observe(document.body, {{ childList: true, subtree: true }});
+        </script>
+    """, unsafe_allow_html=True)
+except Exception as e:
+    st.warning(f"Could not load background image: {str(e)}")
 
 # Cached Model Loading
 # Note: Cache key includes version to force reload when code changes
@@ -23,7 +126,14 @@ def load_engine(version: str = "v2"):
 engine = load_engine(version="v2_fixed")
 
 # Main title
-st.title("Gym Nutrition Tracker")
+st.title("Fit Matterhorn")
+
+# Display Matterhorn image below the title
+try:
+    matterhorn_image_path = Path("public/matterhorn.webp")
+    st.image(str(matterhorn_image_path), use_container_width=True)
+except Exception as e:
+    st.warning(f"Could not load Matterhorn image: {str(e)}")
 
 # Food Logging Section - Moved to top for better UX
 st.header("Log a Meal")
@@ -32,7 +142,7 @@ st.header("Log a Meal")
 # Create a text input for food search query
 search_query = st.text_input(
     "Search for a food",
-    placeholder="Type a food name (e.g., 'chicken', 'apple')",
+    placeholder="Type a food name (e.g., 'Birchermüesli', 'Cervelat')",
     help="Search the Swiss Food Database for foods"
 )
 

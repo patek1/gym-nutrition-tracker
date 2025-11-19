@@ -83,8 +83,8 @@ This project was developed as part of the course **"Fundamentals and Methods of 
 
 ### Team Members
 
-- Muriel ...
-- Sara ...
-- Nicole ...
-- Marc ...
-- Mischa Büchel
+- Muriel
+- Sara
+- Nicole
+- Marc
+- Mischa
