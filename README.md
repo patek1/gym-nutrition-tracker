@@ -81,7 +81,7 @@ nutrition_tracker/
 
 This project was developed as part of the course **"Fundamentals and Methods of Computer Science for Business Studies"** at the University of St. Gallen (HSG).
 
-## Aids and Sources
+### Aids and Sources
 
 | Aid | Description |
 |-----|-------------|
