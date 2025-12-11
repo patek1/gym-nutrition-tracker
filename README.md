@@ -81,6 +81,13 @@ nutrition_tracker/
 
 This project was developed as part of the course **"Fundamentals and Methods of Computer Science for Business Studies"** at the University of St. Gallen (HSG).
 
+## Aids and Sources
+
+| Aid | Description |
+|-----|-------------|
+| GPT Image | Used to generate background & Matterhorn image used in the GUI. |
+| Gemini 2.5 Pro | Used to improve, debug, and optimize the codebase by providing suggestions and corrections. |
+
 ### Team Members
 
 - Muriel
